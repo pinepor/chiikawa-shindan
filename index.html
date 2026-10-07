@@ -196,7 +196,7 @@ document.querySelectorAll('a.cta').forEach(function (a) {
     if (window.goatcounter && window.goatcounter.count) window.goatcounter.count({ path: '/start', title: '診断をはじめる' });
   });
 });
-fetch('https://chiikawa-shindan.goatcounter.com/counter/' + encodeURIComponent('/start') + '.json')
+fetch('https://chiikawa-shindan.goatcounter.com/counter/' + encodeURIComponent('/start') + '.json?start=2026-10-01&end=' + new Date(Date.now() + 1728e5).toISOString().slice(0, 10))
   .then(function (r) { return r.status === 404 ? { count: '0' } : r.ok ? r.json() : null; })
   .then(function (d) { if (d && d.count) { document.getElementById('playersN').textContent = d.count; document.getElementById('players').hidden = false; } })
   .catch(function () {});

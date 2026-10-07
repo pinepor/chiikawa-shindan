@@ -50,6 +50,9 @@ section > .lead{color:var(--sub); margin:0 0 22px; max-width:40em}
 .cta:hover{transform:translateY(-1px)}
 .cta:focus-visible,.faq summary:focus-visible{outline:3px solid var(--sky); outline-offset:4px}
 .cta-note{font-size:.82rem; color:var(--sub); margin:10px 0 0}
+.players{display:inline-flex; align-items:baseline; gap:6px; margin:0 0 14px; font-size:.95rem}
+.players b{font-family:var(--hand); font-weight:400; font-size:1.6rem}
+.players[hidden]{display:none}
 
 /* 入口 */
 .hero{display:grid; grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr); gap:40px; align-items:center; padding-top:4vh}
@@ -118,6 +121,7 @@ footer{border-top:1.5px dashed var(--line); margin-top:18px; padding-top:14px; f
       <h1><span class="small">ガチ</span><span>ちいかわ</span><span>診断</span></h1>
       <p class="lead">70問に答えると、10の性格軸から、14キャラの中でいちばん近いタイプを割り出します。</p>
       <ul class="facts"><li class="ink">全70問</li><li class="ink">約10分</li><li class="ink">14タイプ</li><li class="ink">ログインなしで遊べる</li></ul>
+      <p class="players" id="players" hidden><b id="playersN"></b>人が診断をはじめました</p>
       <a class="cta ink" id="startTop" href="https://claude.ai/artifact/WN1ZLiy3enibGndGNkZFtZ" target="_blank" rel="noopener">診断をはじめる</a>
       <p class="cta-note">診断は claude.ai のページで、新しいタブで開きます。</p>
     </div>
@@ -183,7 +187,20 @@ footer{border-top:1.5px dashed var(--line); margin-top:18px; padding-top:14px; f
   <footer>
     <span>ファンによる非公式の診断です。原作・公式とは関係ありません。</span>
     <span>つくった人 YOSHITAKE HIROTA</span>
+    <span>「診断をはじめる」が押された数を、GoatCounter で数えています（クッキーは使いません。数は数時間おきに更新）</span>
   </footer>
+<script data-goatcounter="https://chiikawa-shindan.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+<script>
+document.querySelectorAll('a.cta').forEach(function (a) {
+  a.addEventListener('click', function () {
+    if (window.goatcounter && window.goatcounter.count) window.goatcounter.count({ path: '/start', title: '診断をはじめる' });
+  });
+});
+fetch('https://chiikawa-shindan.goatcounter.com/counter/' + encodeURIComponent('/start') + '.json')
+  .then(function (r) { return r.ok ? r.json() : null; })
+  .then(function (d) { if (d && d.count && d.count !== '0') { document.getElementById('playersN').textContent = d.count; document.getElementById('players').hidden = false; } })
+  .catch(function () {});
+</script>
 </main>
 </body>
 </html>

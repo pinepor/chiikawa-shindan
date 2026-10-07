@@ -197,8 +197,8 @@ document.querySelectorAll('a.cta').forEach(function (a) {
   });
 });
 fetch('https://chiikawa-shindan.goatcounter.com/counter/' + encodeURIComponent('/start') + '.json')
-  .then(function (r) { return r.ok ? r.json() : null; })
-  .then(function (d) { if (d && d.count && d.count !== '0') { document.getElementById('playersN').textContent = d.count; document.getElementById('players').hidden = false; } })
+  .then(function (r) { return r.status === 404 ? { count: '0' } : r.ok ? r.json() : null; })
+  .then(function (d) { if (d && d.count) { document.getElementById('playersN').textContent = d.count; document.getElementById('players').hidden = false; } })
   .catch(function () {});
 </script>
 </main>

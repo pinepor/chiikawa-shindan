@@ -188,7 +188,7 @@ footer{border-top:1.5px dashed var(--line); margin-top:18px; padding-top:14px; f
   <footer>
     <span>ファンによる非公式の診断です。原作・公式とは関係ありません。</span>
     <span>つくった人 YOSHITAKE HIROTA</span>
-    <span>「診断をはじめる」が押された数を、GoatCounter で数えています（クッキーは使いません。数は数時間おきに更新）</span>
+    <span>「診断をはじめる」が押された数を、GoatCounter で数えています（クッキーは使いません。数は10分ほどで更新）</span>
   </footer>
 <script data-goatcounter="https://chiikawa-shindan.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 <script>
@@ -197,7 +197,8 @@ document.querySelectorAll('a.cta').forEach(function (a) {
     if (window.goatcounter && window.goatcounter.count) window.goatcounter.count({ path: '/start', title: '診断をはじめる' });
   });
 });
-fetch('https://chiikawa-shindan.goatcounter.com/counter/' + encodeURIComponent('/start') + '.json?start=2026-10-01&end=' + new Date(Date.now() + 1728e5).toISOString().slice(0, 10))
+var gcNow = new Date(), gcSlot = Math.floor((gcNow.getUTCHours() * 60 + gcNow.getUTCMinutes()) / 10);
+fetch('https://chiikawa-shindan.goatcounter.com/counter/' + encodeURIComponent('/start') + '.json?start=' + new Date(Date.UTC(2026, 0, 1 + gcSlot)).toISOString().slice(0, 10) + '&end=' + new Date(gcNow.getTime() + 1728e5).toISOString().slice(0, 10))
   .then(function (r) { return r.status === 404 ? { count: '0' } : r.ok ? r.json() : null; })
   .then(function (d) { if (d && d.count) { document.getElementById('playersN').textContent = d.count; document.getElementById('players').hidden = false; } })
   .catch(function () {});

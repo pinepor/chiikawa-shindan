@@ -102,6 +102,10 @@ section > .lead{color:var(--sub); margin:0 0 22px; max-width:40em}
 .last{text-align:center; margin-top:80px}
 .last h2{margin-bottom:16px}
 .doodles{display:flex; justify-content:space-between; align-items:flex-end; color:var(--grass); margin-top:56px}
+.maker{display:inline-flex; align-items:center; gap:10px}
+.xlink{display:inline-grid; place-items:center; width:44px; height:44px; border-radius:50%; background:var(--paper); color:var(--ink)}
+.xlink:hover{transform:translateY(-1px) rotate(-6deg)}
+.xlink:focus-visible{outline:3px solid var(--sky); outline-offset:4px}
 footer{border-top:1.5px dashed var(--line); margin-top:18px; padding-top:14px; font-size:.82rem; color:var(--sub); display:flex; flex-wrap:wrap; justify-content:space-between; gap:8px}
 
 @media (max-width:760px){
@@ -138,12 +142,12 @@ footer{border-top:1.5px dashed var(--line); margin-top:18px; padding-top:14px; f
   html.mo .doodles path{stroke-dasharray:100; stroke-dashoffset:100}
   html.mo .doodles.on path{animation:hm-draw 1.1s ease-out .1s forwards}
 }
-/* 動き（2）: 題名を1字ずつ書く・「ちいかわ」を丸で囲む・「診断」に蛍光ペン・入口に小さな星が浮かぶ・押したところに星が散る・14タイプの性格の形が次々に変わる */
+/* 動き（2）: 題名を1字ずつ書く・「ちいかわ」を下に波線を引く・「診断」に蛍光ペン・入口に小さな星が浮かぶ・押したところに星が散る・14タイプの性格の形が次々に変わる */
 .hero{position:relative}
 .hero > div:not(.drift),.hero > figure{position:relative; z-index:1}
 .hero h1 span{width:fit-content; position:relative}
-.hero h1 .ring{position:absolute; left:-12px; top:-6px; width:calc(100% + 24px); height:calc(100% + 10px); overflow:visible; pointer-events:none}
-.hero h1 .ring path{fill:none; stroke:var(--pink); stroke-width:2.6; stroke-linecap:round}
+.hero h1 .uline{position:absolute; left:0; width:100%; top:100%; height:.22em; overflow:visible; pointer-events:none}
+.hero h1 .uline path{fill:none; stroke:var(--pink); stroke-width:3; stroke-linecap:round; vector-effect:non-scaling-stroke}
 .hero h1 .mark{position:absolute; left:-4px; right:-6px; bottom:.08em; height:.36em; background:var(--yellow); opacity:.7; border-radius:6px; z-index:-1; transform-origin:0 50%}
 .drift{position:absolute; inset:-20px 0 0; overflow:hidden; pointer-events:none; z-index:0}
 .drift svg{position:absolute; bottom:-30px; opacity:0}
@@ -159,13 +163,13 @@ footer{border-top:1.5px dashed var(--line); margin-top:18px; padding-top:14px; f
 .demo .dots li.on{transform:scale(1.4)}
 @media (max-width:760px){ .demo{grid-template-columns:1fr} .demo svg{max-width:300px; margin-inline:auto} }
 @media (prefers-reduced-motion: no-preference){
-  .hero h1 .ch{display:inline-block; animation:hm-write .32s steps(6,end) both; animation-delay:calc(.1s + var(--i) * .09s)}
-  .hero h1 .ring path{stroke-dasharray:100; stroke-dashoffset:100; animation:hm-draw .8s cubic-bezier(.45,0,.2,1) .95s forwards}
+  .hero h1 .ch{display:inline-block; animation:hm-write .45s cubic-bezier(.22,1,.36,1) both; animation-delay:calc(.1s + var(--i) * .08s)}
+  .hero h1 .uline path{stroke-dasharray:100; stroke-dashoffset:100; animation:hm-draw .7s cubic-bezier(.45,0,.2,1) .95s forwards}
   .hero h1 .mark{animation:hm-mark .5s cubic-bezier(.22,1,.36,1) 1.05s both}
   .drift svg{animation:hm-drift var(--t,9s) linear var(--w,0s) infinite}
 }
-@media (prefers-reduced-motion: reduce){ .hero h1 .ring,.drift,.burst{display:none} }
-@keyframes hm-write{from{clip-path:inset(0 100% 0 0); opacity:.2}to{clip-path:inset(0 -10% 0 0); opacity:1}}
+@media (prefers-reduced-motion: reduce){ .drift,.burst{display:none} }
+@keyframes hm-write{from{opacity:0; transform:translateY(.12em) scale(.9)}to{opacity:1; transform:none}}
 @keyframes hm-mark{from{transform:scaleX(0)}to{transform:scaleX(1)}}
 @keyframes hm-drift{0%{transform:translate(0,0) rotate(0); opacity:0}12%{opacity:.85}80%{opacity:.7}100%{transform:translate(var(--x,20px),-62vh) rotate(160deg); opacity:0}}
 @keyframes hm-jelly{0%,86%,100%{transform:none}89%{transform:scale(1.07,.93)}92%{transform:scale(.95,1.05)}95%{transform:scale(1.03,.97)}98%{transform:scale(.99,1.01)}}
@@ -189,7 +193,7 @@ footer{border-top:1.5px dashed var(--line); margin-top:18px; padding-top:14px; f
     <div class="drift" aria-hidden="true" id="drift"></div>
     <div>
       <p class="eyebrow">ちいかわのキャラ性格診断（ファンによる非公式）</p>
-      <h1><span class="small">ガチ</span><span>ちいかわ<svg class="ring" aria-hidden="true" viewBox="0 0 200 80" preserveAspectRatio="none"><path pathLength="100" d="M150 8 C 105 -2, 30 2, 10 26 C -6 48, 40 74, 110 72 C 170 70, 200 52, 192 30 C 186 14, 160 6, 128 6"/></svg></span><span>診断<i class="mark" aria-hidden="true"></i></span></h1>
+      <h1><span class="small">ガチ</span><span>ちいかわ<svg class="uline" aria-hidden="true" viewBox="0 0 200 14" preserveAspectRatio="none"><path pathLength="100" d="M3 8 C 22 2, 40 13, 62 7 S 102 2, 124 8 S 166 13, 197 5"/></svg></span><span>診断<i class="mark" aria-hidden="true"></i></span></h1>
       <p class="lead">70問に答えると、10の性格軸から、14キャラの中でいちばん近いタイプを割り出します。</p>
       <ul class="facts"><li class="ink">全70問</li><li class="ink">約10分</li><li class="ink">14タイプ</li><li class="ink">ログインなしで遊べる</li></ul>
       <p class="players" id="players" hidden><b id="playersN"></b>人が診断をはじめました</p>
@@ -261,7 +265,7 @@ footer{border-top:1.5px dashed var(--line); margin-top:18px; padding-top:14px; f
   </div>
   <footer>
     <span>ファンによる非公式の診断です。原作・公式とは関係ありません。</span>
-    <span>つくった人 YOSHITAKE HIROTA</span>
+    <span class="maker">つくった人 YOSHITAKE HIROTA<a class="xlink ink" href="https://x.com/YOSHITAKEapp" target="_blank" rel="noopener" aria-label="つくった人の X（@YOSHITAKEapp）"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a></span>
     <span>「診断をはじめる」が押された数を、GoatCounter で数えています（クッキーは使いません。数は10分ほどで更新）</span>
   </footer>
 <script>

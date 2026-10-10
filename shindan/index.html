@@ -540,13 +540,14 @@ function aggregate(people){
 }
 let formRows={};
 async function loadCrowdForm(){
-  try{
-    const r=await fetch(RF.csv+(RF.csv.includes("?")?"&":"?")+"t="+Math.floor(Date.now()/6e4),{cache:"no-store"});
-    if(r.ok){ const rows=parseCsv(await r.text()); const col=Math.max(0,(rows[0]||[]).findIndex(h=>h.trim()==="data")); const got={};
-      rows.slice(1).forEach(row=>{ try{ const d=JSON.parse(row[col]||""); if(d&&typeof d.id==="string"&&d.id.length<=40) got[d.id]=d.chars; }catch(e){} });
-      formRows=got; }
-  }catch(e){ /* 読めなければ、前に読めた分と自分の採点だけで数える */ }
-  const people=Object.assign({},formRows); const mine=loadMine(); if(mine&&Object.keys(mine.chars).length) people[mine.id]=mine.chars;
+  // 公開の表は数分間、問い合わせごとに古い版と新しい版が混ざって返るので、3回同時に読み、同じ人の行は日時の新しい方を採る
+  const when=t=>{ const m=String(t).match(/(\d+)\/(\d+)\/(\d+)\s+(\d+):(\d+):(\d+)/); return m?Date.UTC(+m[1],m[2]-1,+m[3],+m[4],+m[5],+m[6]):0; };
+  const texts=await Promise.all([0,1,2].map(k=>fetch(RF.csv+(RF.csv.includes("?")?"&":"?")+"t="+Date.now()+"-"+k,{cache:"no-store"}).then(r=>r.ok?r.text():"").catch(()=>"")));
+  const got=Object.assign({},formRows);
+  texts.forEach(text=>{ const rows=parseCsv(text); const col=Math.max(0,(rows[0]||[]).findIndex(h=>h.trim()==="data"));
+    rows.slice(1).forEach(row=>{ try{ const d=JSON.parse(row[col]||""), at=when(row[0]); if(d&&typeof d.id==="string"&&d.id.length<=40&&(!got[d.id]||at>=got[d.id].at)) got[d.id]={at,chars:d.chars}; }catch(e){} }); });
+  formRows=got;
+  const people={}; for(const id in formRows) people[id]=formRows[id].chars; const mine=loadMine(); if(mine&&Object.keys(mine.chars).length) people[mine.id]=mine.chars;
   crowd=aggregate(Object.values(people));
   if(crowd.n) applyCrowd(); else CROWD_SET=null;
 }
